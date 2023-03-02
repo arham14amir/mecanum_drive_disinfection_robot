@@ -1,0 +1,9 @@
+<root main_tree_to_execute="MainTree">
+  <BehaviorTree ID="MainTree">
+    <Sequence name="CoverageSequence">
+      <ComputeCoveragePath polygons="{field_polygon}" nav_path="{path}" polygons_frame_id="{polygon_frame_id}"/>
+
+      <FollowPath path="{path}" controller_id="FollowPath"/>
+    </Sequence>
+  </BehaviorTree>
+</root>

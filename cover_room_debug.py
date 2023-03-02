@@ -1,0 +1,176 @@
+import rclpy
+from rclpy.node import Node
+from rclpy.action import ActionClient
+from rclpy.qos import QoSProfile, DurabilityPolicy
+from opennav_coverage_msgs.action import ComputeCoveragePath
+from opennav_coverage_msgs.msg import Coordinates, Coordinate
+from nav2_msgs.action import FollowPath
+from geometry_msgs.msg import PolygonStamped, Point32
+import cv2
+import numpy as np
+import yaml
+import os
+import time
+
+class RoomCoverer(Node):
+    def __init__(self):
+        super().__init__('room_coverer')
+        
+        # --- CONFIGURATION ---
+        self.map_yaml_path = '/root/mecanum_drive_2/maps/my_map.yaml' 
+        
+        # --- SETTINGS ---
+        self.HEADLANDS_ENABLED = False  # Set False to get pure zigzag (Simpler)
+        self.INVERT_Y_AXIS = False       # Change to True if the Blue Line is upside down!
+        
+        self.coverage_client = ActionClient(self, ComputeCoveragePath, 'compute_coverage_path')
+        self.nav_client = ActionClient(self, FollowPath, 'follow_path')
+        
+        # DEBUG VISUALIZER
+        latching_qos = QoSProfile(depth=1, durability=DurabilityPolicy.TRANSIENT_LOCAL)
+        self.poly_pub = self.create_publisher(PolygonStamped, '/detected_room_polygon', latching_qos)
+
+    def pixel_to_world(self, u, v, origin, res, height):
+        x = u * res + origin[0]
+        
+        if self.INVERT_Y_AXIS:
+            # Option A: Standard top-down flip
+            y = (height - v) * res + origin[1]
+        else:
+            # Option B: Direct mapping (sometimes needed for cropped maps)
+            # Try switching self.INVERT_Y_AXIS if the blue box is wrong
+            y = (height - v) * res + origin[1] 
+            
+        return x, y
+
+    def get_room_polygon(self):
+        print(f"Reading map from: {self.map_yaml_path}")
+        
+        if not os.path.exists(self.map_yaml_path):
+            print(f"ERROR: Map file not found at {self.map_yaml_path}")
+            return None
+
+        with open(self.map_yaml_path, 'r') as f:
+            map_data = yaml.safe_load(f)
+        
+        res = map_data['resolution']
+        origin = map_data['origin']
+        img_filename = map_data['image']
+        map_dir = os.path.dirname(self.map_yaml_path)
+        img_path = os.path.join(map_dir, img_filename)
+        
+        if not os.path.exists(img_path):
+             print(f"ERROR: Map image not found at {img_path}")
+             return None
+
+        img = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
+        height, width = img.shape
+        
+        # FLIP CHECK: Some maps need vertical flipping to match ROS coordinates
+        # img = cv2.flip(img, 0) # Uncomment this if the blue line is upside down
+
+        _, thresh = cv2.threshold(img, 250, 255, cv2.THRESH_BINARY)
+        contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+        if not contours:
+            print("ERROR: No free space found in map!")
+            return None
+
+        largest_contour = max(contours, key=cv2.contourArea)
+        epsilon = 0.005 * cv2.arcLength(largest_contour, True) 
+        approx = cv2.approxPolyDP(largest_contour, epsilon, True)
+
+        coords_msg = Coordinates()
+        viz_poly = PolygonStamped()
+        viz_poly.header.frame_id = "map"
+        viz_poly.header.stamp = self.get_clock().now().to_msg()
+        
+        for point in approx:
+            c = Coordinate()
+            u, v = point[0][0], point[0][1]
+            
+            # --- FIX: CAREFUL MATH HERE ---
+            # ROS Map Origin is usually Bottom-Left. 
+            # Image Origin is Top-Left.
+            # world_y = origin_y + (height - image_row) * res
+            
+            world_x = origin[0] + (u * res)
+            world_y = origin[1] + ((height - v) * res)
+            
+            c.axis1 = float(world_x)
+            c.axis2 = float(world_y)
+            coords_msg.coordinates.append(c)
+            
+            # Add to visualizer
+            p = Point32()
+            p.x, p.y = float(world_x), float(world_y)
+            viz_poly.polygon.points.append(p)
+        
+        # Close loops
+        coords_msg.coordinates.append(coords_msg.coordinates[0])
+        viz_poly.polygon.points.append(viz_poly.polygon.points[0])
+
+        print(f"Room shape found with {len(coords_msg.coordinates)} corners.")
+        
+        # PUBLISH THE BLUE LINE
+        self.poly_pub.publish(viz_poly)
+        print("PUBLISHED DEBUG POLYGON: Check topic '/detected_room_polygon' in RViz!")
+        
+        return [coords_msg]
+
+    def send_goal(self):
+        polygons = self.get_room_polygon()
+        if not polygons:
+            return
+
+        goal_msg = ComputeCoveragePath.Goal()
+        goal_msg.generate_headland = self.HEADLANDS_ENABLED # Disabled for simple zigzag
+        goal_msg.generate_route = True
+        goal_msg.generate_path = True
+        goal_msg.polygons = polygons
+        goal_msg.frame_id = "map"  
+
+        print("Waiting for Coverage Server...")
+        if not self.coverage_client.wait_for_server(timeout_sec=5.0):
+            print("ERROR: Coverage Server not reachable.")
+            return
+
+        print("Sending Coverage Goal...")
+        future = self.coverage_client.send_goal_async(goal_msg)
+        future.add_done_callback(self.coverage_response_callback)
+
+    def coverage_response_callback(self, future):
+        goal_handle = future.result()
+        if not goal_handle.accepted:
+            print("Goal rejected by server.")
+            return
+        
+        print("Goal accepted! Computing zigzag path...")
+        res_future = goal_handle.get_result_async()
+        res_future.add_done_callback(self.path_received_callback)
+
+    def path_received_callback(self, future):
+        result = future.result().result
+        print(f"Path generated with {len(result.nav_path.poses)} waypoints.")
+        
+        if len(result.nav_path.poses) == 0:
+            print("WARNING: Path is empty!")
+            return
+
+        follow_goal = FollowPath.Goal()
+        follow_goal.path = result.nav_path
+        follow_goal.controller_id = "FollowPath" 
+
+        print("Sending Path to Nav2 Controller...")
+        self.nav_client.wait_for_server()
+        self.nav_client.send_goal_async(follow_goal)
+        print("Robot is moving!")
+
+def main():
+    rclpy.init()
+    node = RoomCoverer()
+    node.send_goal()
+    rclpy.spin(node)
+
+if __name__ == '__main__':
+    main()

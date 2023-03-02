@@ -152,7 +152,6 @@ hardware_interface::return_type RealRobotSystem::read(const rclcpp::Time & /*tim
   return hardware_interface::return_type::OK;
 }
 
-// ================= THE FIXED WRITE FUNCTION =================
 hardware_interface::return_type RealRobotSystem::write(const rclcpp::Time & time, const rclcpp::Duration & /*period*/)
 {
   // 1. SAFETY CHECK: Time Source Synchronization
@@ -172,7 +171,6 @@ hardware_interface::return_type RealRobotSystem::write(const rclcpp::Time & time
 
   return hardware_interface::return_type::OK;
 }
-// ============================================================
 
 void RealRobotSystem::send_serial_command(double w1, double w2, double w3, double w4)
 {
@@ -181,55 +179,100 @@ void RealRobotSystem::send_serial_command(double w1, double w2, double w3, doubl
   ::write(serial_conn_, buffer, len);
 }
 
-// ================= [FINAL] FIXED READ FUNCTION =================
+// ================= FINAL FIXED READ FUNCTION (CHECKS ALL 4 WHEELS) =================
 void RealRobotSystem::read_serial_feedback()
 {
   char buf[256];
   int n = ::read(serial_conn_, buf, sizeof(buf));
   
+  static double offset_0 = 0, offset_1 = 0, offset_2 = 0, offset_3 = 0;
+  static bool first_run = true;
+  
+  // Keep track of the LAST valid ROS positions to check for glitches
+  static double last_ros_p1 = 0, last_ros_p2 = 0, last_ros_p3 = 0, last_ros_p4 = 0;
+
   if (n > 0) {
     buf[n] = '\0'; 
     std::string data(buf);
     
-    // Find the LAST 'e' in the buffer to get the freshest data
+    // Find the LAST 'e' in the buffer
     size_t last_e = data.rfind('e');
     if (last_e != std::string::npos) {
         long t1 = 0, t2 = 0, t3 = 0, t4 = 0;
         int count = sscanf(data.c_str() + last_e, "e %ld %ld %ld %ld", &t1, &t2, &t3, &t4);
         
         if (count == 4) {
-            // --- STANDARD SCALING (From YAML) ---
             double rads_per_tick = (2 * M_PI) / enc_counts_per_rev_; 
             
-            double p1 = t1 * rads_per_tick;
-            double p2 = t2 * rads_per_tick;
-            double p3 = t3 * rads_per_tick;
-            double p4 = t4 * rads_per_tick;
+            // 1. Raw Arduino Values
+            double raw_p1 = t1 * rads_per_tick;
+            double raw_p2 = t2 * rads_per_tick;
+            double raw_p3 = t3 * rads_per_tick;
+            double raw_p4 = t4 * rads_per_tick;
 
-            // --- SAFETY FILTER (Anti-Teleport) ---
-            // If the robot is initialized (not NaN), check for glitches
-            if (!std::isnan(hw_positions_[0])) {
-                double diff = abs(p1 - hw_positions_[0]);
+            // --- STARTUP ZEROING ---
+            if (first_run) {
+                offset_0 = -raw_p1;
+                offset_1 = -raw_p2;
+                offset_2 = -raw_p3;
+                offset_3 = -raw_p4;
+                last_ros_p1 = 0; last_ros_p2 = 0; last_ros_p3 = 0; last_ros_p4 = 0;
+                first_run = false;
+                RCLCPP_INFO(rclcpp::get_logger("RealRobotSystem"), "Startup TARE Complete.");
+            }
+
+            // 2. Calculate CANDIDATE ROS Positions
+            double cand_p1 = raw_p1 + offset_0;
+            double cand_p2 = raw_p2 + offset_1;
+            double cand_p3 = raw_p3 + offset_2;
+            double cand_p4 = raw_p4 + offset_3;
+
+            // 3. GLITCH FILTER (Checking ALL 4 Wheels)
+            double d1 = abs(cand_p1 - last_ros_p1);
+            double d2 = abs(cand_p2 - last_ros_p2);
+            double d3 = abs(cand_p3 - last_ros_p3);
+            double d4 = abs(cand_p4 - last_ros_p4);
+
+            // CHANGED: Increased threshold to 10.0 to allow driving, but stop glitches
+            if (d1 > 10.0 || d2 > 10.0 || d3 > 10.0 || d4 > 10.0) {
                 
-                // If position jumps > 5.0 radians in one cycle (impossible), IGNORE IT
-                if (diff > 5.0) {
-                    RCLCPP_WARN(rclcpp::get_logger("RealRobotSystem"), "TRASH DATA DETECTED (Jump: %f). Ignoring.", diff);
-                    return; // Stop. Do not update positions.
+                // CRITICAL CHECK: Is it a Brownout (ALL wheels near zero)?
+                bool all_zero = (abs(raw_p1) < 0.2 && abs(raw_p2) < 0.2 && abs(raw_p3) < 0.2 && abs(raw_p4) < 0.2);
+
+                if (all_zero) {
+                    RCLCPP_WARN(rclcpp::get_logger("RealRobotSystem"), "Real Brownout Reset Detected. Recalibrating.");
+                    offset_0 = last_ros_p1 - raw_p1;
+                    offset_1 = last_ros_p2 - raw_p2;
+                    offset_2 = last_ros_p3 - raw_p3;
+                    offset_3 = last_ros_p4 - raw_p4;
+                    
+                    cand_p1 = raw_p1 + offset_0;
+                    cand_p2 = raw_p2 + offset_1;
+                    cand_p3 = raw_p3 + offset_2;
+                    cand_p4 = raw_p4 + offset_3;
+                } 
+                else {
+                    // It jumped, but NOT to zero. This is NOISE/CORRUPTION.
+                    RCLCPP_WARN(rclcpp::get_logger("RealRobotSystem"), "Packet Rejected: Jump too large");
+                    return; 
                 }
             }
-            // -------------------------------------------
 
-            hw_positions_[0] = p1;
-            hw_positions_[1] = p2;
-            hw_positions_[2] = p3;
-            hw_positions_[3] = p4;
+            // 4. Update ROS & History
+            hw_positions_[0] = cand_p1;
+            hw_positions_[1] = cand_p2;
+            hw_positions_[2] = cand_p3;
+            hw_positions_[3] = cand_p4;
+
+            last_ros_p1 = cand_p1;
+            last_ros_p2 = cand_p2;
+            last_ros_p3 = cand_p3;
+            last_ros_p4 = cand_p4;
         }
     }
-  }
 }
-// ===============================================================
-
-}  // namespace robot_hardware_interface
+}
+} // namespace robot_hardware_interface
 
 #include "pluginlib/class_list_macros.hpp"
 PLUGINLIB_EXPORT_CLASS(

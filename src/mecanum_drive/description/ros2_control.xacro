@@ -6,12 +6,12 @@
     <ros2_control name="RealRobot" type="system">
       <hardware>
         <plugin>robot_hardware_interface/RealRobotSystem</plugin>
-        <param name="port">/dev/ttyUSB0</param>
+        <param name="port">/dev/esp32</param>
         <param name="baud_rate">115200</param>
         <param name="loop_rate">30</param>
-        <param name="device">/dev/ttyUSB0</param>
+        <param name="device">/dev/esp32</param>
         <param name="timeout_ms">1000</param>
-        <param name="enc_counts_per_rev">442</param>
+        <param name="enc_counts_per_rev">302.7</param>
       </hardware>
 
       <joint name="front_left_wheel_joint">
