@@ -1,0 +1,319 @@
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="mecanum_drive">
+
+  <!-- BASE LINK-->
+<link name="base_link">
+</link>
+
+<!-- CHASSIS LINK -->
+<joint name="chassis_joint" type="fixed">
+  <parent link="base_link"/>
+  <child link="chassis"/>
+  <origin xyz="0 0 0" rpy="1.5709 0 0"/>
+</joint>
+
+<link name="chassis">
+  <visual>
+    <origin xyz="0.145 0 -0.17" rpy="0 -1.5709 0"/>
+    <geometry>
+      <mesh filename="package://mecanum_drive/meshes/chesi.STL" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </visual>
+  <collision>
+    <origin xyz="0.145 0 -0.17" rpy="0 -1.5709 0"/>
+    <geometry>
+      <mesh filename="package://mecanum_drive/meshes/chesi.STL" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <surface>
+      <friction>
+        <ode>
+          <mu>2</mu>
+          <mu2>2</mu2>
+        </ode>
+      </friction>
+       <contact>
+          <ode>
+            <kp>500000.0</kp>
+            <kd>100</kd>
+          </ode>
+        </contact>
+    </surface>
+  </collision>
+  <inertial>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <mass value="10.0"/>
+     <inertia 
+        ixx="0.0116" ixy="0.0" ixz="0.0"
+        iyy="0.0116" iyz="0.0"
+        izz="0.0465"/>
+  </inertial>
+</link>
+
+<!-- plate LINK -->
+<joint name="plate_joint" type="fixed">
+  <parent link="chassis"/>
+  <child link="plate_link"/>
+  <origin xyz="-0.16 0.09 -0.17" rpy="1.57 0 0"/>
+</joint>
+
+<link name="plate_link">
+  <visual>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mecanum_drive/meshes/plate.STL" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </visual>
+  <collision>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mecanum_drive/meshes/plate.STL" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <surface>
+      <friction>
+        <ode>
+          <mu>2</mu>
+          <mu2>2</mu2>
+        </ode>
+      </friction>
+       <contact>
+          <ode>
+            <kp>500000.0</kp>
+            <kd>100</kd>
+          </ode>
+        </contact>
+    </surface>
+  </collision>
+  <inertial>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <mass value="10.0"/>
+     <inertia 
+        ixx="0.0116" ixy="0.0" ixz="0.0"
+        iyy="0.0116" iyz="0.0"
+        izz="0.0465"/>
+  </inertial>
+</link>
+
+<!-- lidar LINK -->
+<joint name="laser_joint" type="fixed">
+  <parent link="base_link"/>
+  <child link="laser_frame"/>
+  <origin xyz="-0.04 0 0.09" rpy="0 0 0"/>
+</joint>
+
+<link name="laser_frame">
+  <visual>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mecanum_drive/meshes/lidar.STL" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </visual>
+  <collision>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mecanum_drive/meshes/lidar.STL" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <surface>
+      <friction>
+        <ode>
+          <mu>2</mu>
+          <mu2>2</mu2>
+        </ode>
+      </friction>
+       <contact>
+          <ode>
+            <kp>500000.0</kp>
+            <kd>100</kd>
+          </ode>
+        </contact>
+    </surface>
+  </collision>
+  <inertial>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <mass value="10.0"/>
+     <inertia 
+        ixx="0.0116" ixy="0.0" ixz="0.0"
+        iyy="0.0116" iyz="0.0"
+        izz="0.0465"/>
+  </inertial>
+</link>
+
+<!-- FRONT LEFT WHEEL LINK -->
+<joint name="front_left_wheel_joint" type="continuous">
+  <parent link="chassis"/>
+  <child link="front_left_wheel"/>
+  <origin xyz="0.055 0.01 -0.075" rpy="4.7125 0 0"/>
+  <axis xyz="0 1 0"/>
+</joint>
+
+<link name="front_left_wheel">
+  <visual>
+    <origin xyz="-0.036 0.045 -0.034" rpy="1.5709 0 1.5709"/>
+    <geometry>
+      <mesh filename="package://mecanum_drive/meshes/tyre.STL" scale="-0.001 0.001 0.001"/>
+    </geometry>
+  </visual>
+  <collision>
+    <origin xyz="-0.032 0.045 -0.034" rpy="1.5709 0 1.5709"/>
+    <geometry>
+      <mesh filename="package://mecanum_drive/meshes/tyre.STL" scale="-0.001 0.001 0.001"/>
+    </geometry>
+    <surface>
+      <friction>
+        <ode>
+          <mu>2</mu>
+          <mu2>2</mu2>
+        </ode>
+      </friction>
+       <contact>
+          <ode>
+            <kp>500000.0</kp>
+            <kd>100</kd>
+          </ode>
+        </contact>
+    </surface>
+  </collision>
+  <inertial>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <mass value="0.5"/>
+   <inertia 
+        ixx="0.001" ixy="0.0" ixz="0.0"
+        iyy="0.001" iyz="0.0"
+        izz="0.0012"/>
+  </inertial>
+</link>
+
+<!-- REAR LEFT WHEEL LINK--> 
+<joint name="rear_left_wheel_joint" type="continuous">
+  <parent link="chassis"/>
+  <child link="rear_left_wheel"/>
+  <origin xyz="-0.075 0.01 -0.075" rpy="4.7125 0 0"/>
+  <axis xyz="0 1 0"/>
+</joint>
+
+<link name="rear_left_wheel">
+  <visual>
+    <origin xyz="-0.036 0.003 -0.034" rpy="1.5709 0 1.5709"/>
+    <geometry>
+      <mesh filename="package://mecanum_drive/meshes/tyre.STL" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </visual>
+  <collision>
+    <origin xyz="-0.034 0.003 -0.034" rpy="1.5709 0 1.5709"/>
+    <geometry>
+      <mesh filename="package://mecanum_drive/meshes/tyre.STL" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <surface>
+      <friction>
+        <ode>
+          <mu>2</mu>
+          <mu2>2</mu2>
+        </ode>
+      </friction>
+       <contact>
+          <ode>
+            <kp>500000.0</kp>
+            <kd>100</kd>
+          </ode>
+        </contact>
+    </surface>
+  </collision>
+  <inertial>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <mass value="0.5"/>
+    <inertia 
+        ixx="0.001" ixy="0.0" ixz="0.0"
+        iyy="0.001" iyz="0.0"
+        izz="0.0012"/>
+  </inertial>
+</link>
+
+<!-- FRONT RIGHT WHEEL LINK-->
+<joint name="front_right_wheel_joint" type="continuous">
+  <parent link="chassis"/>
+  <child link="front_right_wheel"/>
+  <origin xyz="0.055 0.01 0.055" rpy="4.7125 0 0"/>
+  <axis xyz="0 1 0"/>
+</joint>
+
+<link name="front_right_wheel">
+  <visual>
+    <origin xyz="-0.034 0.01 -0.034" rpy="0 0 -1.5709"/>
+    <geometry>
+      <mesh filename="package://mecanum_drive/meshes/tyre.STL" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </visual>
+  <collision>
+    <origin xyz="-0.034 0.01 -0.034" rpy="0 0 -1.5709"/>
+    <geometry>
+      <mesh filename="package://mecanum_drive/meshes/tyre.STL" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <surface>
+      <friction>
+        <ode>
+          <mu>2</mu>
+          <mu2>2</mu2>
+        </ode>
+      </friction>
+       <contact>
+          <ode>
+            <kp>500000.0</kp>
+            <kd>100</kd>
+          </ode>
+        </contact>
+    </surface>
+  </collision>
+  <inertial>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <mass value="0.5"/>
+    <inertia 
+        ixx="0.001" ixy="0.0" ixz="0.0"
+        iyy="0.001" iyz="0.0"
+        izz="0.0012"/>
+  </inertial>
+</link>
+
+<!-- REAR RIGHT WHEEL LINK--> 
+<joint name="rear_right_wheel_joint" type="continuous">
+  <parent link="chassis"/>
+  <child link="rear_right_wheel"/>
+  <origin xyz="-0.075 0.01 0.055" rpy="4.7125 0 0"/>
+  <axis xyz="0 1 0"/>
+</joint>
+
+<link name="rear_right_wheel">
+  <visual>
+    <origin xyz="-0.034 -0.03 -0.034" rpy="0 0 -1.5709"/>
+    <geometry>
+      <mesh filename="package://mecanum_drive/meshes/tyre.STL" scale="-0.001 0.001 0.001"/>
+    </geometry>
+  </visual>
+  <collision>
+    <origin xyz="-0.03 -0.03 -0.034" rpy="0 0 -1.5709"/>
+    <geometry>
+      <mesh filename="package://mecanum_drive/meshes/tyre.STL" scale="-0.001 0.001 0.001"/>
+    </geometry>
+    <surface>
+      <friction>
+        <ode>
+          <mu>2</mu>
+          <mu2>2</mu2>
+        </ode>
+      </friction>
+       <contact>
+          <ode>
+            <kp>500000.0</kp>
+            <kd>100</kd>
+          </ode>
+        </contact>
+    </surface>
+  </collision>
+  <inertial>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <mass value="0.5"/>
+    <inertia 
+        ixx="0.001" ixy="0.0" ixz="0.0"
+        iyy="0.001" iyz="0.0"
+        izz="0.0012"/>
+  </inertial>
+</link>
+  
+</robot>

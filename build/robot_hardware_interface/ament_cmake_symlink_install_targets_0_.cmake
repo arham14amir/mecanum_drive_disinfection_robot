@@ -1,1 +1,0 @@
-ament_cmake_symlink_install_targets("TARGET_FILES" "/home/arham/mecanum_drive_2/build/robot_hardware_interface/librobot_hardware_interface.so" "TARGETS" "robot_hardware_interface" "ARCHIVE_DESTINATION" "lib" "LIBRARY_DESTINATION" "lib" "RUNTIME_DESTINATION" "bin")

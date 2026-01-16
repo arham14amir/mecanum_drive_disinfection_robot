@@ -1,1 +1,0 @@
-/home/arham/mecanum_drive_2/src/mecanum_drive/launch/launch_sim.launch.py

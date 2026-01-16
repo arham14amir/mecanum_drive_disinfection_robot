@@ -1,9 +1,0 @@
-/home/arham/mecanum_drive_2/build/mecanum_drive/CMakeFiles/uninstall.dir
-/home/arham/mecanum_drive_2/build/mecanum_drive/CMakeFiles/mecanum_drive_uninstall.dir
-/home/arham/mecanum_drive_2/build/mecanum_drive/CMakeFiles/test.dir
-/home/arham/mecanum_drive_2/build/mecanum_drive/CMakeFiles/edit_cache.dir
-/home/arham/mecanum_drive_2/build/mecanum_drive/CMakeFiles/rebuild_cache.dir
-/home/arham/mecanum_drive_2/build/mecanum_drive/CMakeFiles/list_install_components.dir
-/home/arham/mecanum_drive_2/build/mecanum_drive/CMakeFiles/install.dir
-/home/arham/mecanum_drive_2/build/mecanum_drive/CMakeFiles/install/local.dir
-/home/arham/mecanum_drive_2/build/mecanum_drive/CMakeFiles/install/strip.dir
