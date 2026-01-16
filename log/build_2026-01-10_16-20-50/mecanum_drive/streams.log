@@ -1,0 +1,46 @@
+[0.008s] Invoking command in '/home/arham/mecanum_drive_2/build/mecanum_drive': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake /home/arham/mecanum_drive_2/src/mecanum_drive -DAMENT_CMAKE_SYMLINK_INSTALL=1 -DCMAKE_INSTALL_PREFIX=/home/arham/mecanum_drive_2/install/mecanum_drive
+[0.020s] -- Found ament_cmake: 1.3.11 (/opt/ros/humble/share/ament_cmake/cmake)
+[0.107s] -- Override CMake install command with custom implementation using symlinks instead of copying resources
+[0.118s] -- Found ament_lint_auto: 0.12.12 (/opt/ros/humble/share/ament_lint_auto/cmake)
+[0.170s] -- Added test 'copyright' to check source files copyright and LICENSE
+[0.176s] -- Added test 'flake8' to check Python code syntax and style conventions
+[0.177s] -- Added test 'lint_cmake' to check CMake code style
+[0.177s] -- Added test 'pep257' to check Python code against some of the docstring style conventions in PEP 257
+[0.180s] -- Added test 'xmllint' to check XML markup files
+[0.181s] -- Configuring done
+[0.184s] -- Generating done
+[0.185s] -- Build files have been written to: /home/arham/mecanum_drive_2/build/mecanum_drive
+[0.187s] Invoked command in '/home/arham/mecanum_drive_2/build/mecanum_drive' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake /home/arham/mecanum_drive_2/src/mecanum_drive -DAMENT_CMAKE_SYMLINK_INSTALL=1 -DCMAKE_INSTALL_PREFIX=/home/arham/mecanum_drive_2/install/mecanum_drive
+[0.188s] Invoking command in '/home/arham/mecanum_drive_2/build/mecanum_drive': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /home/arham/mecanum_drive_2/build/mecanum_drive -- -j8 -l8
+[0.211s] Invoked command in '/home/arham/mecanum_drive_2/build/mecanum_drive' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /home/arham/mecanum_drive_2/build/mecanum_drive -- -j8 -l8
+[0.218s] Invoking command in '/home/arham/mecanum_drive_2/build/mecanum_drive': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --install /home/arham/mecanum_drive_2/build/mecanum_drive
+[0.222s] -- Install configuration: ""
+[0.223s] -- Execute custom install script
+[0.223s] -- Symlinking: /home/arham/mecanum_drive_2/install/mecanum_drive/share/mecanum_drive/config/empty.yaml
+[0.229s] -- Symlinking: /home/arham/mecanum_drive_2/install/mecanum_drive/share/mecanum_drive/config/mecanum_controllers.yaml
+[0.235s] -- Symlinking: /home/arham/mecanum_drive_2/install/mecanum_drive/share/mecanum_drive/description/robot.urdf.xacro
+[0.240s] -- Symlinking: /home/arham/mecanum_drive_2/install/mecanum_drive/share/mecanum_drive/description/robot_core.xacro
+[0.246s] -- Symlinking: /home/arham/mecanum_drive_2/install/mecanum_drive/share/mecanum_drive/description/ros2_control.xacro
+[0.251s] -- Symlinking: /home/arham/mecanum_drive_2/install/mecanum_drive/share/mecanum_drive/launch/launch_sim.launch.py
+[0.256s] -- Symlinking: /home/arham/mecanum_drive_2/install/mecanum_drive/share/mecanum_drive/launch/rsp.launch.py
+[0.262s] -- Symlinking: /home/arham/mecanum_drive_2/install/mecanum_drive/share/mecanum_drive/worlds/empty.world
+[0.267s] -- Symlinking: /home/arham/mecanum_drive_2/install/mecanum_drive/share/mecanum_drive/meshes/chesi.STL
+[0.272s] -- Symlinking: /home/arham/mecanum_drive_2/install/mecanum_drive/share/mecanum_drive/meshes/lidar.STL
+[0.277s] -- Symlinking: /home/arham/mecanum_drive_2/install/mecanum_drive/share/mecanum_drive/meshes/plate.STL
+[0.283s] -- Symlinking: /home/arham/mecanum_drive_2/install/mecanum_drive/share/mecanum_drive/meshes/tyre.STL
+[0.288s] -- Symlinking: /home/arham/mecanum_drive_2/install/mecanum_drive/share/ament_index/resource_index/package_run_dependencies/mecanum_drive
+[0.294s] -- Symlinking: /home/arham/mecanum_drive_2/install/mecanum_drive/share/ament_index/resource_index/parent_prefix_path/mecanum_drive
+[0.299s] -- Symlinking: /home/arham/mecanum_drive_2/install/mecanum_drive/share/mecanum_drive/environment/ament_prefix_path.sh
+[0.305s] -- Symlinking: /home/arham/mecanum_drive_2/install/mecanum_drive/share/mecanum_drive/environment/ament_prefix_path.dsv
+[0.310s] -- Symlinking: /home/arham/mecanum_drive_2/install/mecanum_drive/share/mecanum_drive/environment/path.sh
+[0.315s] -- Symlinking: /home/arham/mecanum_drive_2/install/mecanum_drive/share/mecanum_drive/environment/path.dsv
+[0.320s] -- Symlinking: /home/arham/mecanum_drive_2/install/mecanum_drive/share/mecanum_drive/local_setup.bash
+[0.326s] -- Symlinking: /home/arham/mecanum_drive_2/install/mecanum_drive/share/mecanum_drive/local_setup.sh
+[0.332s] -- Symlinking: /home/arham/mecanum_drive_2/install/mecanum_drive/share/mecanum_drive/local_setup.zsh
+[0.338s] -- Symlinking: /home/arham/mecanum_drive_2/install/mecanum_drive/share/mecanum_drive/local_setup.dsv
+[0.343s] -- Symlinking: /home/arham/mecanum_drive_2/install/mecanum_drive/share/mecanum_drive/package.dsv
+[0.349s] -- Symlinking: /home/arham/mecanum_drive_2/install/mecanum_drive/share/ament_index/resource_index/packages/mecanum_drive
+[0.355s] -- Symlinking: /home/arham/mecanum_drive_2/install/mecanum_drive/share/mecanum_drive/cmake/mecanum_driveConfig.cmake
+[0.360s] -- Symlinking: /home/arham/mecanum_drive_2/install/mecanum_drive/share/mecanum_drive/cmake/mecanum_driveConfig-version.cmake
+[0.365s] -- Symlinking: /home/arham/mecanum_drive_2/install/mecanum_drive/share/mecanum_drive/package.xml
+[0.373s] Invoked command in '/home/arham/mecanum_drive_2/build/mecanum_drive' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --install /home/arham/mecanum_drive_2/build/mecanum_drive

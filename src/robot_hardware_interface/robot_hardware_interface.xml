@@ -1,0 +1,9 @@
+<library path="robot_hardware_interface">
+  <class name="robot_hardware_interface/RealRobotSystem"
+         type="robot_hardware_interface::RealRobotSystem"
+         base_class_type="hardware_interface::SystemInterface">
+    <description>
+      A hardware interface for the real Mecanum Robot communicating via Serial.
+    </description>
+  </class>
+</library>

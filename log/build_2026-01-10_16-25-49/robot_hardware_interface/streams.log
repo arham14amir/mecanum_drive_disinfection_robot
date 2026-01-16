@@ -1,0 +1,35 @@
+[0.007s] Invoking command in '/home/arham/mecanum_drive_2/build/robot_hardware_interface': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /home/arham/mecanum_drive_2/build/robot_hardware_interface -- -j8 -l8
+[0.034s] [35m[1mConsolidate compiler generated dependencies of target robot_hardware_interface[0m
+[0.047s] [ 50%] [32mBuilding CXX object CMakeFiles/robot_hardware_interface.dir/src/robot_hardware_interface.cpp.o[0m
+[2.486s] [100%] [32m[1mLinking CXX shared library librobot_hardware_interface.so[0m
+[2.601s] [100%] Built target robot_hardware_interface
+[2.608s] Invoked command in '/home/arham/mecanum_drive_2/build/robot_hardware_interface' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /home/arham/mecanum_drive_2/build/robot_hardware_interface -- -j8 -l8
+[2.609s] Invoking command in '/home/arham/mecanum_drive_2/build/robot_hardware_interface': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --install /home/arham/mecanum_drive_2/build/robot_hardware_interface
+[2.613s] -- Install configuration: ""
+[2.614s] -- Execute custom install script
+[2.614s] -- Up-to-date symlink: /home/arham/mecanum_drive_2/install/robot_hardware_interface/share/robot_hardware_interface//robot_hardware_interface.xml
+[2.614s] -- Up-to-date symlink: /home/arham/mecanum_drive_2/install/robot_hardware_interface/lib/librobot_hardware_interface.so
+[2.614s] -- Up-to-date symlink: /home/arham/mecanum_drive_2/install/robot_hardware_interface/include/robot_hardware_interface/robot_hardware_interface.hpp
+[2.614s] -- Up-to-date symlink: /home/arham/mecanum_drive_2/install/robot_hardware_interface/share/robot_hardware_interface/robot_hardware_interface.xml
+[2.614s] -- Up-to-date symlink: /home/arham/mecanum_drive_2/install/robot_hardware_interface/share/robot_hardware_interface/environment/library_path.sh
+[2.614s] -- Up-to-date symlink: /home/arham/mecanum_drive_2/install/robot_hardware_interface/share/robot_hardware_interface/environment/library_path.dsv
+[2.615s] -- Up-to-date symlink: /home/arham/mecanum_drive_2/install/robot_hardware_interface/share/ament_index/resource_index/package_run_dependencies/robot_hardware_interface
+[2.615s] -- Up-to-date symlink: /home/arham/mecanum_drive_2/install/robot_hardware_interface/share/ament_index/resource_index/parent_prefix_path/robot_hardware_interface
+[2.615s] -- Up-to-date symlink: /home/arham/mecanum_drive_2/install/robot_hardware_interface/share/robot_hardware_interface/environment/ament_prefix_path.sh
+[2.615s] -- Up-to-date symlink: /home/arham/mecanum_drive_2/install/robot_hardware_interface/share/robot_hardware_interface/environment/ament_prefix_path.dsv
+[2.615s] -- Up-to-date symlink: /home/arham/mecanum_drive_2/install/robot_hardware_interface/share/robot_hardware_interface/environment/path.sh
+[2.615s] -- Up-to-date symlink: /home/arham/mecanum_drive_2/install/robot_hardware_interface/share/robot_hardware_interface/environment/path.dsv
+[2.615s] -- Up-to-date symlink: /home/arham/mecanum_drive_2/install/robot_hardware_interface/share/robot_hardware_interface/local_setup.bash
+[2.615s] -- Up-to-date symlink: /home/arham/mecanum_drive_2/install/robot_hardware_interface/share/robot_hardware_interface/local_setup.sh
+[2.615s] -- Up-to-date symlink: /home/arham/mecanum_drive_2/install/robot_hardware_interface/share/robot_hardware_interface/local_setup.zsh
+[2.615s] -- Up-to-date symlink: /home/arham/mecanum_drive_2/install/robot_hardware_interface/share/robot_hardware_interface/local_setup.dsv
+[2.615s] -- Symlinking: /home/arham/mecanum_drive_2/install/robot_hardware_interface/share/robot_hardware_interface/package.dsv
+[2.621s] -- Up-to-date symlink: /home/arham/mecanum_drive_2/install/robot_hardware_interface/share/ament_index/resource_index/packages/robot_hardware_interface
+[2.621s] -- Up-to-date symlink: /home/arham/mecanum_drive_2/install/robot_hardware_interface/share/ament_index/resource_index/hardware_interface__pluginlib__plugin/robot_hardware_interface
+[2.621s] -- Up-to-date symlink: /home/arham/mecanum_drive_2/install/robot_hardware_interface/share/robot_hardware_interface/cmake/ament_cmake_export_include_directories-extras.cmake
+[2.621s] -- Up-to-date symlink: /home/arham/mecanum_drive_2/install/robot_hardware_interface/share/robot_hardware_interface/cmake/ament_cmake_export_libraries-extras.cmake
+[2.621s] -- Up-to-date symlink: /home/arham/mecanum_drive_2/install/robot_hardware_interface/share/robot_hardware_interface/cmake/ament_cmake_export_dependencies-extras.cmake
+[2.622s] -- Up-to-date symlink: /home/arham/mecanum_drive_2/install/robot_hardware_interface/share/robot_hardware_interface/cmake/robot_hardware_interfaceConfig.cmake
+[2.622s] -- Up-to-date symlink: /home/arham/mecanum_drive_2/install/robot_hardware_interface/share/robot_hardware_interface/cmake/robot_hardware_interfaceConfig-version.cmake
+[2.622s] -- Up-to-date symlink: /home/arham/mecanum_drive_2/install/robot_hardware_interface/share/robot_hardware_interface/package.xml
+[2.623s] Invoked command in '/home/arham/mecanum_drive_2/build/robot_hardware_interface' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --install /home/arham/mecanum_drive_2/build/robot_hardware_interface
