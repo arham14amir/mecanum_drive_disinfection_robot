@@ -38,10 +38,11 @@ ros2 launch <your_pkg> <your_launch>.launch.py
 ```bash
 ros2 run teleop_twist_keyboard teleop_twist_keyboard
 # or send a "Nav2 Goal" from RViz
-```
+```2026
 
 ## 📸 Demo
-*(Drop a short GIF or screenshots of the robot moving here — biggest win for recruiters.)*
+<img width="1600" height="1204" alt="WhatsApp Image 2026-07-16 at 12 54 19 AM" src="https://github.com/user-attachments/assets/55750d0d-9478-4574-8b8d-e3ba549595b3" />
+
 
 ## 👤 Author
 **Muhammad Arham** — [GitHub](https://github.com/arham14amir) · [LinkedIn](https://www.linkedin.com/in/arhamamir)
